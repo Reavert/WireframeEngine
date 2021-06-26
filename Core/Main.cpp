@@ -166,8 +166,8 @@ void RenderFunction(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     object->Render(mainProgram);
-    object->SetRotation(60.0f, rot, 0.0f);
-    rot += 1;
+    object->SetRotation(rot, rot, rot);
+    rot += 0.1f;
 
     glutSwapBuffers();
 }

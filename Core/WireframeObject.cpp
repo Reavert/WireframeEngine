@@ -70,5 +70,21 @@ void WireframeObject::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat 
     m_rotation.x = rotationX;
     m_rotation.y = rotationY;
     m_rotation.z = rotationZ;
-    
+}
+
+void WireframeObject::SetRotation(Vector3 rotation)
+{
+    m_rotation = rotation;
+}
+
+void WireframeObject::SetPosition(GLfloat positionX, GLfloat positionY, GLfloat positionZ)
+{
+    m_position.x = positionX;
+    m_position.y = positionY;
+    m_position.z = positionZ;
+}
+
+void WireframeObject::SetPosition(Vector3 position)
+{
+    m_position = position;
 }
