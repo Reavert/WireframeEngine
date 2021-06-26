@@ -34,6 +34,8 @@ WireframeObject* object;
 WireframeObject* testObject;
 ObjectLoader* objectLoader;
 
+ShaderProgram* mainProgram;
+
 void Initialize(int, char* []);
 void InitWindow(int, char* []);
 void ResizeFunction(int, int);
@@ -74,8 +76,10 @@ void Initialize(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
+    mainProgram = new ShaderProgram("vertex.glsl", "fragment.glsl");
+    mainProgram->Use();
 
-    vector<GLfloat> totalVertices;
+    vector<Vector4> totalVertices;
 
     objectLoader = new ObjectLoader;
     ObjectInfo info = objectLoader->Load("test.obj");
@@ -86,11 +90,9 @@ void Initialize(int argc, char* argv[])
         {
             int vertexIndex = f.vertexIndices[i];
             Vertex v = info.vertices[vertexIndex - 1];
-
-            totalVertices.push_back(v.x * 0.1);
-            totalVertices.push_back(v.y * 0.1);
-            totalVertices.push_back(v.z * 0.1);
-            totalVertices.push_back(v.w);
+            Vector4 vertexVector = Vector4(v.x, v.y, v.z);
+            
+            totalVertices.push_back(vertexVector);
         }
     }
     vector<GLfloat> testVertices = {
@@ -105,7 +107,9 @@ void Initialize(int argc, char* argv[])
         -0.1f, -0.1f, 1.9f, 1.0f,
     };
 
-    object = new WireframeObject(totalVertices, Colors);
+    Vector4 whiteColor = Vector4(1.0f, 1.0f, 1.0f);
+
+    object = new WireframeObject(totalVertices, whiteColor);
     object->SetRotation(90.0f, 0.0f, 0.0f);
     //testObject = new WireframeObject(testVertices, Colors);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -160,11 +164,11 @@ void RenderFunction(void)
 
     ++FrameCount;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glOrtho(-1.0f, 1.0, -1.0f, 1.0f, 0.2, 300.0f);
-    object->Render();
+    
+    object->Render(mainProgram);
     object->SetRotation(60.0f, rot, 0.0f);
     rot += 1;
-    //testObject->Render();
+
     glutSwapBuffers();
 }
 

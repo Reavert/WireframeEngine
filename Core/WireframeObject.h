@@ -2,25 +2,30 @@
 #include "Utils.h"
 #include "ShaderProgram.h"
 #include <vector>
+#include "Vector4.h"
+#include "Vector3.h"
 
 #pragma once
 class WireframeObject
 {
 public:
-	WireframeObject(vector<GLfloat> vertices, vector<GLfloat> colors);
+	WireframeObject(vector<Vector4> vertices, Vector4 color);
 	~WireframeObject(void);
 
-	void Render(void);
+	void Render(ShaderProgram* program);
 	void SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ);
 private:
-	vector<GLfloat> m_vertices;
-	vector<GLfloat> m_colors;
+	vector<Vector4> m_vertices;
+	Vector4 m_color;
+
+	vector<GLfloat> m_verticesBuffer;
+	vector<GLfloat> m_colorBuffer;
 
 	GLuint m_vao;
 	GLuint m_vbo;
-	GLuint m_colorBuffer;
+	GLuint m_colorBufferId;
 
-	ShaderProgram* m_shaderProgram;
+	Vector3 m_rotation;
 
 	void CreateVBO(void);
 	void DestroyVBO(void);

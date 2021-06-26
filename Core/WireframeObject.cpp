@@ -1,15 +1,17 @@
 #include "WireframeObject.h"
-#include <stdio.h>
 
-WireframeObject::WireframeObject(vector<GLfloat> vertices, vector<GLfloat> colors)
+WireframeObject::WireframeObject(vector<Vector4> vertices, Vector4 color)
 {
-	m_vertices = vertices;
-	m_colors.clear();
-    for (GLfloat v : m_vertices)
+    m_vertices = vertices;
+    m_color = color;
+
+    auto cArr = m_color.ToArray();
+    for (auto v : m_vertices)
     {
-        m_colors.push_back(1.0f);
+        auto vArr = v.ToArray();
+        m_verticesBuffer.insert(m_verticesBuffer.end(), vArr.begin(), vArr.end());
+        m_colorBuffer.insert(m_colorBuffer.end(), cArr.begin(), cArr.end());
     }
-    m_shaderProgram = new ShaderProgram("vertex.glsl", "fragment.glsl");
     CreateVBO();
     
 }
@@ -21,21 +23,21 @@ WireframeObject::~WireframeObject(void)
 
 void WireframeObject::CreateVBO(void)
 {
-    GLsizeiptr vboSize = m_vertices.size() * sizeof(GLfloat);
-    GLsizeiptr colorBufferSize = m_colors.size() * sizeof(GLfloat);
+    GLsizeiptr vboSize = m_verticesBuffer.size() * sizeof(GLfloat);
+    GLsizeiptr colorBufferSize = m_colorBuffer.size() * sizeof(GLfloat);
 
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, vboSize, m_vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vboSize, m_verticesBuffer.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
-    glGenBuffers(1, &m_colorBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer);
-    glBufferData(GL_ARRAY_BUFFER, colorBufferSize, m_colors.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &m_colorBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, m_colorBufferId);
+    glBufferData(GL_ARRAY_BUFFER, colorBufferSize, m_colorBuffer.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 }
@@ -47,21 +49,26 @@ void WireframeObject::DestroyVBO(void)
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glDeleteBuffers(1, &m_colorBuffer);
+    glDeleteBuffers(1, &m_colorBufferId);
     glDeleteBuffers(1, &m_vbo);
 
     glBindVertexArray(0);
     glDeleteVertexArrays(1, &m_vao);
 }
 
-void WireframeObject::Render(void)
+void WireframeObject::Render(ShaderProgram* program)
 {
-    m_shaderProgram->Use();
+    glPushMatrix();
+    program->SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
     glBindVertexArray(m_vao);
-    glDrawArrays(GL_LINE_STRIP, 0, m_vertices.size());
+    glDrawArrays(GL_LINE_STRIP, 0, m_verticesBuffer.size());
+    glPopMatrix();
 }
 
 void WireframeObject::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
 {
-    m_shaderProgram->SetRotation(rotationX, rotationY, rotationZ);
+    m_rotation.x = rotationX;
+    m_rotation.y = rotationY;
+    m_rotation.z = rotationZ;
+    
 }
