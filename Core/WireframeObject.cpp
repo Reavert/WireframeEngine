@@ -59,6 +59,7 @@ void WireframeObject::DestroyVBO(void)
 void WireframeObject::Render(ShaderProgram* program)
 {
     glPushMatrix();
+    program->SetPosition(m_position.x, m_position.y, m_position.z);
     program->SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
     glBindVertexArray(m_vao);
     glDrawArrays(GL_LINE_STRIP, 0, m_verticesBuffer.size());

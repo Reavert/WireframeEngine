@@ -12,6 +12,7 @@ public:
 	void Use(void);
 
 	void SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ);
+	void SetPosition(GLfloat x, GLfloat y, GLfloat z);
 private:
 	GLchar* m_vertexShaderText;
 	GLchar* m_fragmentShaderText;
@@ -21,5 +22,6 @@ private:
 	GLint m_programId;
 
 	GLint m_rotationLocation;
+	GLint m_positionLocation;
 };
 

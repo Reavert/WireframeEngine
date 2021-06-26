@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 
-#define MAX_FILE_SIZE 1024
+#define MAX_FILE_SIZE 5012
 
 using namespace std;
 #pragma once

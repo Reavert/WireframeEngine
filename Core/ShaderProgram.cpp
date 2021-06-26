@@ -23,6 +23,7 @@ ShaderProgram::ShaderProgram(const char* vertexShaderName, const char* fragmentS
 	glLinkProgram(m_programId);
 
 	m_rotationLocation = glGetUniformLocation(m_programId, "rotation");
+	m_positionLocation = glGetUniformLocation(m_programId, "position");
 }
 
 ShaderProgram::~ShaderProgram()
@@ -44,6 +45,11 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
 {
 	glProgramUniform3f(m_programId, m_rotationLocation, rotationX, rotationY, rotationZ);
+}
+
+void ShaderProgram::SetPosition(GLfloat x, GLfloat y, GLfloat z)
+{
+	glProgramUniform3f(m_programId, m_positionLocation, x, y, z);
 }
 
 void ShaderProgram::Use(void)
