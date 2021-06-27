@@ -21,6 +21,9 @@ GLfloat hPos = 0.0f;
 GLfloat vPos = 0.0f;
 GLfloat scale = 1.0f;
 
+GLfloat rotX = 0.0f;
+GLfloat rotY = 0.0f;
+
 vector<GLfloat> Vertices = {
       -0.8f,  0.8f, 0.0f, 1.0f,
        0.8f,  0.8f, 0.0f, 1.0f,
@@ -177,6 +180,7 @@ void RenderFunction(void)
     object->Render(mainProgram);
     object->SetPosition(vPos, hPos, 0.0f);
     object->SetScale(scale, scale, scale);
+    object->SetRotation(rotX, rotY, 0.0f);
     if (Keyboard::KeyPressed(LKEY_W))
         hPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_S))
@@ -189,6 +193,14 @@ void RenderFunction(void)
         scale += 0.001;
     if (Keyboard::KeyPressed(KEY_MINUS))
         scale -= 0.001;
+    if (Keyboard::KeyPressed(KEY_8))
+        rotX += 0.1;
+    if (Keyboard::KeyPressed(KEY_2))
+        rotX -= 0.1;
+    if (Keyboard::KeyPressed(KEY_4))
+        rotY -= 0.1;
+    if (Keyboard::KeyPressed(KEY_6))
+        rotY += 0.1;
     glutSwapBuffers();
 }
 
