@@ -89,8 +89,8 @@ void Initialize(int argc, char* argv[])
     vector<Vector4> totalVertices;
 
     objectLoader = new ObjectLoader;
-    ObjectInfo info = objectLoader->Load("test.obj");
-    
+    ObjectInfo info = objectLoader->Load("cube.obj");
+
     for (Face f : info.faces)
     {
         for (int i = 0; i < 3; i++)

@@ -1,11 +1,11 @@
+﻿#pragma once
 #include <glew.h>
 #include <stdio.h>
 #include <string>
-
-#define MAX_FILE_SIZE 5012
+#define MAX_FILE_SIZE 8192
 
 using namespace std;
-#pragma once
+
 class Utils
 {
 public:
