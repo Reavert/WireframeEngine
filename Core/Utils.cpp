@@ -33,7 +33,7 @@ GLchar* Utils::LoadFile(const char* filename)
 	else
 	{
 		result = new GLchar[]{ '\0' };
-		printf("Error when loading file '%s'", filename);
+		printf("Error when loading file '%s'\n", filename);
 	}
 	return result;
 }

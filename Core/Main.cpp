@@ -83,13 +83,13 @@ void Initialize(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
-    mainProgram = new ShaderProgram("vertex.glsl", "fragment.glsl");
+    mainProgram = new ShaderProgram("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     mainProgram->Use();
 
     vector<Vector4> totalVertices;
 
     objectLoader = new ObjectLoader;
-    ObjectInfo info = objectLoader->Load("cube.obj");
+    ObjectInfo info = objectLoader->Load("Objects/cube.3d");
 
     for (Face f : info.faces)
     {
