@@ -63,3 +63,4 @@
 #*.RTF   diff=astextplain
 
 Core/Includes/* linguist-vendored
+Core/Objects/* linguist-vendored
