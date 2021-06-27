@@ -5,7 +5,8 @@
 #include "freeglut.h"
 #include "WireframeObject.h"
 #include "ObjectLoader.h"
-#define WINDOW_TITLE_PREFIX "Chapter 2"
+#include "Keyboard.h"
+#define WINDOW_TITLE_PREFIX "Application"
 
 int
 CurrentWidth = 800,
@@ -14,7 +15,11 @@ WindowHandle = 0;
 
 unsigned FrameCount = 0;
 
-GLfloat rot = 0.0f;
+unsigned char keys[256];
+
+GLfloat hPos = 0.0f;
+GLfloat vPos = 0.0f;
+GLfloat scale = 1.0f;
 
 vector<GLfloat> Vertices = {
       -0.8f,  0.8f, 0.0f, 1.0f,
@@ -42,6 +47,8 @@ void ResizeFunction(int, int);
 void RenderFunction(void);
 void TimerFunction(int);
 void IdleFunction(void);
+void KeyboardFunction(unsigned char, int, int);
+void KeyboardUpFunction(unsigned char, int, int);
 void Cleanup(void);
 
 int main(int argc, char* argv[])
@@ -110,7 +117,6 @@ void Initialize(int argc, char* argv[])
     Vector4 whiteColor = Vector4(1.0f, 1.0f, 1.0f);
 
     object = new WireframeObject(totalVertices, whiteColor);
-    object->SetRotation(90.0f, 0.0f, 0.0f);
     //testObject = new WireframeObject(testVertices, Colors);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
@@ -146,6 +152,9 @@ void InitWindow(int argc, char* argv[])
 
     glutReshapeFunc(ResizeFunction);
     glutDisplayFunc(RenderFunction);
+    glutKeyboardFunc(Keyboard::KeyboardDown);
+    glutKeyboardUpFunc(Keyboard::KeyboardUp);
+    glutIgnoreKeyRepeat(GL_TRUE);
     glutIdleFunc(IdleFunction);
     glutTimerFunc(0, TimerFunction, 0);
     glutCloseFunc(Cleanup);
@@ -166,9 +175,20 @@ void RenderFunction(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     object->Render(mainProgram);
-    object->SetScale(rot, rot, rot);
-    rot += 0.001f;
-
+    object->SetPosition(vPos, hPos, 0.0f);
+    object->SetScale(scale, scale, scale);
+    if (Keyboard::KeyPressed(LKEY_W))
+        hPos += 0.001;
+    if (Keyboard::KeyPressed(LKEY_S))
+        hPos -= 0.001;
+    if (Keyboard::KeyPressed(LKEY_D))
+        vPos += 0.001;
+    if (Keyboard::KeyPressed(LKEY_A))
+        vPos -= 0.001;
+    if (Keyboard::KeyPressed(KEY_PLUS))
+        scale += 0.001;
+    if (Keyboard::KeyPressed(KEY_MINUS))
+        scale -= 0.001;
     glutSwapBuffers();
 }
 
