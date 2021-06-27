@@ -1,8 +1,6 @@
 #pragma once
 #include <glew.h>
 
-#define MAX_SHADER_TEXT_SIZE 1024
-
 class ShaderProgram
 {
 public:
@@ -13,6 +11,7 @@ public:
 
 	void SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ);
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z);
+	void SetScale(GLfloat x, GLfloat y, GLfloat z);
 private:
 	GLchar* m_vertexShaderText;
 	GLchar* m_fragmentShaderText;
@@ -23,5 +22,6 @@ private:
 
 	GLint m_rotationLocation;
 	GLint m_positionLocation;
+	GLint m_scaleLocation;
 };
 

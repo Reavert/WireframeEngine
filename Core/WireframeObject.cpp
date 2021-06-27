@@ -12,6 +12,10 @@ WireframeObject::WireframeObject(vector<Vector4> vertices, Vector4 color)
         m_verticesBuffer.insert(m_verticesBuffer.end(), vArr.begin(), vArr.end());
         m_colorBuffer.insert(m_colorBuffer.end(), cArr.begin(), cArr.end());
     }
+
+    m_position = Vector3(0.0f, 0.0f, 0.0f);
+    m_rotation = Vector3(0.0f, 0.0f, 0.0f);
+    m_scale = Vector3(1.0f, 1.0f, 1.0f);
     CreateVBO();
     
 }
@@ -61,6 +65,7 @@ void WireframeObject::Render(ShaderProgram* program)
     glPushMatrix();
     program->SetPosition(m_position.x, m_position.y, m_position.z);
     program->SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
+    program->SetScale(m_scale.x, m_scale.y, m_scale.z);
     glBindVertexArray(m_vao);
     glDrawArrays(GL_LINE_STRIP, 0, m_verticesBuffer.size());
     glPopMatrix();
@@ -88,4 +93,16 @@ void WireframeObject::SetPosition(GLfloat positionX, GLfloat positionY, GLfloat 
 void WireframeObject::SetPosition(Vector3 position)
 {
     m_position = position;
+}
+
+void WireframeObject::SetScale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
+{
+    m_scale.x = scaleX;
+    m_scale.y = scaleY;
+    m_scale.z = scaleZ;
+}
+
+void WireframeObject::SetScale(Vector3 scale)
+{
+    m_scale = scale;
 }

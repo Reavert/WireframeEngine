@@ -4,7 +4,16 @@ layout(location=0) in vec4 in_Position;
 layout(location=1) in vec4 in_Color;
 uniform vec3 position;
 uniform vec3 rotation;
+uniform vec3 scale;
 out vec4 ex_Color;
+
+mat4 scaling( in float dx, in float dy, in float dz ) {
+  return mat4(
+    dx, 0.0, 0.0, 0.0,
+    0.0, dy, 0.0, 0.0,
+    0.0, 0.0, dz, 0.0,
+    0.0, 0.0, 0.0, 1.0);
+}
 
 mat4 translation( in float dx, in float dy, in float dz ) {
   return mat4(
@@ -40,6 +49,6 @@ mat4 rotationZ( in float angle ) {
 
 void main(void)
 {
-  gl_Position = in_Position * translation(position.x, position.y, position.z) *rotationX(rotation.x*PI/180.0) * rotationY(rotation.y*PI/180.0) * rotationZ(rotation.z*PI/180.0);
+  gl_Position = in_Position * scaling(scale.x, scale.y, scale.z) * translation(position.x, position.y, position.z) *rotationX(rotation.x*PI/180.0) * rotationY(rotation.y*PI/180.0) * rotationZ(rotation.z*PI/180.0);
   ex_Color = in_Color;
 }

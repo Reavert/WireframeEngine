@@ -13,6 +13,7 @@ public:
 	~WireframeObject(void);
 
 	void Render(ShaderProgram* program);
+
 	void SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ);
 	void SetRotation(Vector3 rotation);
 	Vector3 GetRotation();
@@ -20,6 +21,11 @@ public:
 	void SetPosition(GLfloat positionX, GLfloat positionY, GLfloat positionZ);
 	void SetPosition(Vector3 position);
 	Vector3 GetPosition();
+
+	void SetScale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
+	void SetScale(Vector3 scale);
+	Vector3 GetScale();
+
 private:
 	vector<Vector4> m_vertices;
 	Vector4 m_color;
@@ -33,6 +39,7 @@ private:
 
 	Vector3 m_rotation;
 	Vector3 m_position;
+	Vector3 m_scale;
 
 	void CreateVBO(void);
 	void DestroyVBO(void);
