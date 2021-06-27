@@ -49,6 +49,10 @@ mat4 rotationZ( in float angle ) {
 
 void main(void)
 {
-  gl_Position = in_Position * scaling(scale.x, scale.y, scale.z) * translation(position.x, position.y, position.z) *rotationX(rotation.x*PI/180.0) * rotationY(rotation.y*PI/180.0) * rotationZ(rotation.z*PI/180.0);
+  float rad_k = PI/180.0;
+  mat4 rotation = rotationX(rotation.x*rad_k) * rotationY(rotation.y*rad_k) * rotationZ(rotation.z*rad_k);
+  mat4 model = rotation * scaling(scale.x, scale.y, scale.z) * translation(position.x, position.y, position.z);
+  
+  gl_Position = in_Position * model;
   ex_Color = in_Color;
 }
