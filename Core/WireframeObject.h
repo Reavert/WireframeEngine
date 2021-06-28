@@ -1,15 +1,17 @@
+#pragma once
+
 #include "glew.h"
 #include "Utils.h"
 #include "ShaderProgram.h"
 #include <vector>
 #include "Vector4.h"
 #include "Vector3.h"
+#include "ObjectInfo.h"
 
-#pragma once
 class WireframeObject
 {
 public:
-	WireframeObject(vector<Vector4> vertices, vector<GLuint> indices, Vector4 color);
+	WireframeObject(ObjectInfo info, Vector4 color);
 	~WireframeObject(void);
 
 	void Render(ShaderProgram* program);

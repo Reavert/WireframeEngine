@@ -1,10 +1,21 @@
 #include "WireframeObject.h"
 
-WireframeObject::WireframeObject(vector<Vector4> vertices, vector<GLuint> indices, Vector4 color)
+WireframeObject::WireframeObject(ObjectInfo info, Vector4 color)
 {
-    m_vertices = vertices;
-    m_indices = indices;
+    m_vertices = info.vertices;
     m_color = color;
+
+    for (Face f : info.faces)
+    {
+        m_indices.push_back(f.vertexIndices[0] - 1);
+        m_indices.push_back(f.vertexIndices[1] - 1);
+
+        m_indices.push_back(f.vertexIndices[1] - 1);
+        m_indices.push_back(f.vertexIndices[2] - 1);
+
+        m_indices.push_back(f.vertexIndices[2] - 1);
+        m_indices.push_back(f.vertexIndices[0] - 1);
+    }
 
     auto cArr = m_color.ToArray();
     for (auto v : m_vertices)
@@ -30,7 +41,8 @@ void WireframeObject::CreateVBO(void)
 {
     GLsizeiptr vboSize = m_verticesBuffer.size() * sizeof(GLfloat);
     GLsizeiptr colorBufferSize = m_colorBuffer.size() * sizeof(GLfloat);
-    GLsizeiptr indexBufferSize = m_indices.size() * sizeof(GLint);
+    GLsizeiptr indexBufferSize = m_indices.size() * sizeof(GLuint);
+
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
@@ -48,7 +60,7 @@ void WireframeObject::CreateVBO(void)
 
     glGenBuffers(1, &m_elementBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, &m_indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, m_indices.data(), GL_STATIC_DRAW);
 }
 
 void WireframeObject::DestroyVBO(void)
@@ -60,6 +72,7 @@ void WireframeObject::DestroyVBO(void)
 
     glDeleteBuffers(1, &m_colorBufferId);
     glDeleteBuffers(1, &m_vbo);
+    glDeleteBuffers(1, &m_elementBufferId);
 
     glBindVertexArray(0);
     glDeleteVertexArrays(1, &m_vao);

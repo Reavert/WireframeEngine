@@ -96,28 +96,14 @@ void Initialize(int argc, char* argv[])
     camera->UpdateProjection(mainProgram);
     camera->UpdateView(mainProgram);
     
-
     objectLoader = new ObjectLoader;
 
     ObjectInfo info = objectLoader->Load("Objects/sphere.3d");
     vector<Vector4> vertices;
     vector<GLuint> indices;
 
-    for (Face f : info.faces)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            indices.push_back(f.vertexIndices[i]);
-        }
-    }
-    for (Vertex v : info.vertices)
-    {
-        vertices.push_back(Vector4(v.x, v.y, v.z));
-    }
-
     Vector4 whiteColor = Vector4(1.0f, 1.0f, 1.0f);
-
-    object = new WireframeObject(vertices, indices, whiteColor);
+    object = new WireframeObject(info, whiteColor);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);

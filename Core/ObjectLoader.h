@@ -1,29 +1,12 @@
-#include <string>
-#include "WireframeObject.h"
-#include <glew.h>
-
 #pragma once
+
+#include <string>
+#include "ObjectInfo.h"
+#include <glew.h>
+#include "Vector4.h"
 
 using namespace std;
 
-struct Vertex
-{
-	GLfloat x;
-	GLfloat y;
-	GLfloat z;
-	GLfloat w;
-};
-
-struct Face
-{
-	GLint vertexIndices[3];
-};
-
-struct ObjectInfo
-{
-	vector<Vertex> vertices;
-	vector<Face> faces;
-};
 class ObjectLoader
 {
 public:

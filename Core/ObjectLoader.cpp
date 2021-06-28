@@ -1,5 +1,6 @@
 #include "ObjectLoader.h"
 
+
 ObjectInfo ObjectLoader::Load(const char* filename)
 {
 	FILE* objectFile;
@@ -15,9 +16,8 @@ ObjectInfo ObjectLoader::Load(const char* filename)
 			fscanf_s(objectFile, "%s", elementType, _countof(elementType));
 			if (!strcmp(elementType, "v"))
 			{
-				Vertex v;
+				Vector4 v;
 				fscanf_s(objectFile, "%f %f %f", &v.x, &v.y, &v.z);
-				v.w = 1.0f;
 				objectInfo.vertices.push_back(v);
 			}
 			else if (!strcmp(elementType, "f"))
