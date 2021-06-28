@@ -1,8 +1,9 @@
 #include "WireframeObject.h"
 
-WireframeObject::WireframeObject(vector<Vector4> vertices, Vector4 color)
+WireframeObject::WireframeObject(vector<Vector4> vertices, vector<GLuint> indices, Vector4 color)
 {
     m_vertices = vertices;
+    m_indices = indices;
     m_color = color;
 
     auto cArr = m_color.ToArray();
@@ -29,7 +30,7 @@ void WireframeObject::CreateVBO(void)
 {
     GLsizeiptr vboSize = m_verticesBuffer.size() * sizeof(GLfloat);
     GLsizeiptr colorBufferSize = m_colorBuffer.size() * sizeof(GLfloat);
-
+    GLsizeiptr indexBufferSize = m_indices.size() * sizeof(GLint);
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
@@ -44,6 +45,10 @@ void WireframeObject::CreateVBO(void)
     glBufferData(GL_ARRAY_BUFFER, colorBufferSize, m_colorBuffer.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
+
+    glGenBuffers(1, &m_elementBufferId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, &m_indices[0], GL_STATIC_DRAW);
 }
 
 void WireframeObject::DestroyVBO(void)
@@ -67,7 +72,8 @@ void WireframeObject::Render(ShaderProgram* program)
     program->SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
     program->SetScale(m_scale.x, m_scale.y, m_scale.z);
     glBindVertexArray(m_vao);
-    glDrawArrays(GL_LINE_STRIP, 0, m_verticesBuffer.size());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId);
+    glDrawElements(GL_LINES, m_indices.size(), GL_UNSIGNED_INT, (void*)0);
     glPopMatrix();
 }
 

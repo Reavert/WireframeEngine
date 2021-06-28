@@ -9,7 +9,7 @@
 class WireframeObject
 {
 public:
-	WireframeObject(vector<Vector4> vertices, Vector4 color);
+	WireframeObject(vector<Vector4> vertices, vector<GLuint> indices, Vector4 color);
 	~WireframeObject(void);
 
 	void Render(ShaderProgram* program);
@@ -28,6 +28,7 @@ public:
 
 private:
 	vector<Vector4> m_vertices;
+	vector<GLuint> m_indices;
 	Vector4 m_color;
 
 	vector<GLfloat> m_verticesBuffer;
@@ -36,6 +37,7 @@ private:
 	GLuint m_vao;
 	GLuint m_vbo;
 	GLuint m_colorBufferId;
+	GLuint m_elementBufferId;
 
 	Vector3 m_rotation;
 	Vector3 m_position;

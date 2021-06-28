@@ -32,7 +32,7 @@ Camera::Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearZ, GLfloa
 	m_projectionMatrix[3][2] = 1.0f;
 	m_projectionMatrix[3][3] = 0.0f;
 
-	m_viewPosition = Vector3(0.0f, 0.0f, -5.0f);
+	m_viewPosition = Vector3(0.0f, 0.0f, 0.0f);
 	m_viewRotation = Vector3(0.0f, 0.0f, 0.0f);
 }
 

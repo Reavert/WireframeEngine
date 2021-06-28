@@ -54,8 +54,6 @@ void ResizeFunction(int, int);
 void RenderFunction(void);
 void TimerFunction(int);
 void IdleFunction(void);
-void KeyboardFunction(unsigned char, int, int);
-void KeyboardUpFunction(unsigned char, int, int);
 void Cleanup(void);
 
 int main(int argc, char* argv[])
@@ -90,7 +88,6 @@ void Initialize(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
-    
 
     mainProgram = new ShaderProgram("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     mainProgram->Use();
@@ -98,38 +95,30 @@ void Initialize(int argc, char* argv[])
     camera = new Camera(60.0f, CurrentWidth, CurrentHeight, 0.2f, 1000.0f);
     camera->UpdateProjection(mainProgram);
     camera->UpdateView(mainProgram);
-    vector<Vector4> totalVertices;
+    
 
     objectLoader = new ObjectLoader;
+
     ObjectInfo info = objectLoader->Load("Objects/sphere.3d");
+    vector<Vector4> vertices;
+    vector<GLuint> indices;
 
     for (Face f : info.faces)
     {
         for (int i = 0; i < 3; i++)
         {
-            int vertexIndex = f.vertexIndices[i];
-            Vertex v = info.vertices[vertexIndex - 1];
-            Vector4 vertexVector = Vector4(v.x, v.y, v.z);
-            
-            totalVertices.push_back(vertexVector);
+            indices.push_back(f.vertexIndices[i]);
         }
     }
-    vector<GLfloat> testVertices = {
-        -0.8f, 0.8f, 0.0f, 1.0f,
-        0.8f, 0.8f, 0.0f, 1.0f,
-        0.8f, -0.8f, 0.0f, 1.0f,
-        -0.8f, -0.8f, 0.0f, 1.0f,
-        0.0f, 0.0f, 0.0f, 1.0f,
-        -0.1f, 0.1f, 1.9f, 1.0f,
-        0.1f, 0.1f, 1.9f, 1.0f,
-        0.1f, -0.1f, 1.9f, 1.0f,
-        -0.1f, -0.1f, 1.9f, 1.0f,
-    };
+    for (Vertex v : info.vertices)
+    {
+        vertices.push_back(Vector4(v.x, v.y, v.z));
+    }
 
     Vector4 whiteColor = Vector4(1.0f, 1.0f, 1.0f);
 
-    object = new WireframeObject(totalVertices, whiteColor);
-    //testObject = new WireframeObject(testVertices, Colors);
+    object = new WireframeObject(vertices, indices, whiteColor);
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
     glPointSize(3.0f);
