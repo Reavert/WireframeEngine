@@ -18,8 +18,10 @@ unsigned FrameCount = 0;
 
 unsigned char keys[256];
 
-GLfloat hPos = 0.0f;
-GLfloat vPos = 0.0f;
+GLfloat xPos = 0.0f;
+GLfloat yPos = 0.0f;
+GLfloat zPos = 0.0f;
+
 GLfloat scale = 1.0f;
 
 GLfloat rotX = 0.0f;
@@ -95,11 +97,11 @@ void Initialize(int argc, char* argv[])
 
     camera = new Camera(60.0f, CurrentWidth, CurrentHeight, 0.2f, 1000.0f);
     camera->UpdateProjection(mainProgram);
-
+    camera->UpdateView(mainProgram);
     vector<Vector4> totalVertices;
 
     objectLoader = new ObjectLoader;
-    ObjectInfo info = objectLoader->Load("Objects/cube.3d");
+    ObjectInfo info = objectLoader->Load("Objects/sphere.3d");
 
     for (Face f : info.faces)
     {
@@ -185,17 +187,21 @@ void RenderFunction(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     object->Render(mainProgram);
-    object->SetPosition(vPos, hPos, 0.0f);
-    object->SetScale(scale, scale, scale);
     object->SetRotation(rotX, rotY, 0.0f);
+    camera->SetPosition(xPos, yPos, zPos);
+    camera->UpdateView(mainProgram);
     if (Keyboard::KeyPressed(LKEY_W))
-        hPos += 0.001;
+        zPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_S))
-        hPos -= 0.001;
+        zPos -= 0.001;
     if (Keyboard::KeyPressed(LKEY_D))
-        vPos += 0.001;
+        xPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_A))
-        vPos -= 0.001;
+        xPos -= 0.001;
+    if (Keyboard::KeyPressed(LKEY_Q))
+        yPos += 0.001;
+    if (Keyboard::KeyPressed(LKEY_Z))
+        yPos -= 0.001;
     if (Keyboard::KeyPressed(KEY_PLUS))
         scale += 0.001;
     if (Keyboard::KeyPressed(KEY_MINUS))

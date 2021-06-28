@@ -13,6 +13,8 @@ public:
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z);
 	void SetScale(GLfloat x, GLfloat y, GLfloat z);
 	void SetProjection(GLfloat* matrix4);
+	void SetViewPosition(GLfloat viewPosX, GLfloat viewPosY, GLfloat viewPosZ);
+	void SetViewRotation(GLfloat viewRotationX, GLfloat viewRotationY, GLfloat viewRotationZ);
 private:
 	GLchar* m_vertexShaderText;
 	GLchar* m_fragmentShaderText;
@@ -25,5 +27,7 @@ private:
 	GLint m_positionLocation;
 	GLint m_scaleLocation;
 	GLint m_projectionLocation;
+	GLint m_viewPositionLocation;
+	GLint m_viewRotationLocation;
 };
 

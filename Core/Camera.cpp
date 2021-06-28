@@ -31,6 +31,33 @@ Camera::Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearZ, GLfloa
 	m_projectionMatrix[3][1] = 0.0f;
 	m_projectionMatrix[3][2] = 1.0f;
 	m_projectionMatrix[3][3] = 0.0f;
+
+	m_viewPosition = Vector3(0.0f, 0.0f, -5.0f);
+	m_viewRotation = Vector3(0.0f, 0.0f, 0.0f);
+}
+
+void Camera::SetPosition(GLfloat posX, GLfloat posY, GLfloat posZ)
+{
+	m_viewPosition.x = posX;
+	m_viewPosition.y = posY;
+	m_viewPosition.z = posZ;
+}
+
+void Camera::SetPosition(Vector3 position)
+{
+	m_viewPosition = position;
+}
+
+void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
+{
+	m_viewRotation.x = rotX;
+	m_viewRotation.y = rotY;
+	m_viewRotation.z = rotZ;
+}
+
+void Camera::SetRotation(Vector3 rotation)
+{
+	m_viewRotation = rotation;
 }
 
 void Camera::UpdateProjection(ShaderProgram* program)
@@ -40,5 +67,6 @@ void Camera::UpdateProjection(ShaderProgram* program)
 
 void Camera::UpdateView(ShaderProgram* program)
 {
-	// Not implemented yet
+	program->SetViewPosition(m_viewPosition.x, m_viewPosition.y, m_viewPosition.z);
+	program->SetViewRotation(m_viewRotation.x, m_viewRotation.y, m_viewRotation.z);
 }

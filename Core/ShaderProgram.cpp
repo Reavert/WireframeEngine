@@ -26,6 +26,8 @@ ShaderProgram::ShaderProgram(const char* vertexShaderName, const char* fragmentS
 	m_positionLocation = glGetUniformLocation(m_programId, "position");
 	m_scaleLocation = glGetUniformLocation(m_programId, "scale");
 	m_projectionLocation = glGetUniformLocation(m_programId, "projection");
+	m_viewPositionLocation = glGetUniformLocation(m_programId, "viewPosition");
+	m_viewRotationLocation = glGetUniformLocation(m_programId, "viewRotation");
 }
 
 ShaderProgram::~ShaderProgram()
@@ -62,6 +64,15 @@ void ShaderProgram::SetScale(GLfloat x, GLfloat y, GLfloat z)
 void ShaderProgram::SetProjection(GLfloat* matrix4)
 {
 	glProgramUniformMatrix4fv(m_programId, m_projectionLocation, 1, GL_FALSE, matrix4);
+}
+
+void ShaderProgram::SetViewPosition(GLfloat viewPosX, GLfloat viewPosY, GLfloat viewPosZ)
+{
+	glProgramUniform3f(m_programId, m_viewPositionLocation, viewPosX, viewPosY, viewPosZ);
+}
+void ShaderProgram::SetViewRotation(GLfloat viewRotationX, GLfloat viewRotationY, GLfloat viewRotationZ)
+{
+	glProgramUniform3f(m_programId, m_viewRotationLocation, viewRotationX, viewRotationY, viewRotationZ);
 }
 
 void ShaderProgram::Use(void)

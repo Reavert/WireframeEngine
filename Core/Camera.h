@@ -10,6 +10,12 @@ class Camera
 public:
 	Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearZ, GLfloat farZ);
 
+	void SetPosition(GLfloat posX, GLfloat posY, GLfloat posZ);
+	void SetPosition(Vector3 position);
+
+	void SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ);
+	void SetRotation(Vector3 rotation);
+
 	void UpdateProjection(ShaderProgram* program);
 	void UpdateView(ShaderProgram* program);
 private:
@@ -22,4 +28,5 @@ private:
 	GLfloat m_projectionMatrix[4][4];
 
 	Vector3 m_viewPosition;
+	Vector3 m_viewRotation;
 };
