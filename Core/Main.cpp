@@ -187,7 +187,7 @@ void RenderFunction(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     object->Render(mainProgram);
-    object->SetRotation(rotX, rotY, 0.0f);
+    camera->SetRotation(rotX, rotY, 0.0f);
     camera->SetPosition(xPos, yPos, zPos);
     camera->UpdateView(mainProgram);
     if (Keyboard::KeyPressed(LKEY_W))
@@ -206,9 +206,9 @@ void RenderFunction(void)
         scale += 0.001;
     if (Keyboard::KeyPressed(KEY_MINUS))
         scale -= 0.001;
-    if (Keyboard::KeyPressed(KEY_8))
-        rotX += 0.1;
     if (Keyboard::KeyPressed(KEY_2))
+        rotX += 0.1;
+    if (Keyboard::KeyPressed(KEY_8))
         rotX -= 0.1;
     if (Keyboard::KeyPressed(KEY_4))
         rotY -= 0.1;

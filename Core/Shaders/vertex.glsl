@@ -56,7 +56,7 @@ mat4 view( in vec3 viewPositionVec, in vec3 viewRotationVec )
 {
   float rad_k = PI / 180.0;
   mat4 viewRotationMatrix = rotationX(-viewRotationVec.x*rad_k) * rotationY(-viewRotationVec.y*rad_k) * rotationZ(-viewRotationVec.z*rad_k);
-  return viewRotationMatrix * translation(-viewPositionVec.x, -viewPositionVec.y, -viewPositionVec.z);
+  return translation(-viewPositionVec.x, -viewPositionVec.y, -viewPositionVec.z) * viewRotationMatrix;
 }
 
 void main(void)
