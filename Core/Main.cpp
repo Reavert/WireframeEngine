@@ -6,6 +6,7 @@
 #include "WireframeObject.h"
 #include "ObjectLoader.h"
 #include "Keyboard.h"
+#include "Camera.h"
 #define WINDOW_TITLE_PREFIX "Application"
 
 int
@@ -43,6 +44,7 @@ WireframeObject* testObject;
 ObjectLoader* objectLoader;
 
 ShaderProgram* mainProgram;
+Camera* camera;
 
 void Initialize(int, char* []);
 void InitWindow(int, char* []);
@@ -86,8 +88,13 @@ void Initialize(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
+    
+
     mainProgram = new ShaderProgram("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     mainProgram->Use();
+
+    camera = new Camera(60.0f, CurrentWidth, CurrentHeight, 0.2f, 1000.0f);
+    camera->UpdateProjection(mainProgram);
 
     vector<Vector4> totalVertices;
 
