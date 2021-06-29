@@ -27,6 +27,8 @@ GLfloat scale = 1.0f;
 GLfloat rotX = 0.0f;
 GLfloat rotY = 0.0f;
 
+GLfloat t = 0.0f;
+
 vector<GLfloat> Vertices = {
       -0.8f,  0.8f, 0.0f, 1.0f,
        0.8f,  0.8f, 0.0f, 1.0f,
@@ -41,8 +43,8 @@ vector<GLfloat> Colors = {
   1.0f, 1.0f, 1.0f, 1.0f
 };
 
-WireframeObject* object;
-WireframeObject* testObject;
+WireframeObject* sphereObject;
+WireframeObject* cubeObject;
 ObjectLoader* objectLoader;
 
 ShaderProgram* mainProgram;
@@ -98,12 +100,17 @@ void Initialize(int argc, char* argv[])
     
     objectLoader = new ObjectLoader;
 
-    ObjectInfo info = objectLoader->Load("Objects/sphere.3d");
+    ObjectInfo sphereInfo = objectLoader->Load("Objects/sphere.3d");
+    ObjectInfo cubeInfo = objectLoader->Load("Objects/cube.3d");
+
     vector<Vector4> vertices;
     vector<GLuint> indices;
 
-    Vector4 whiteColor = Vector4(1.0f, 1.0f, 1.0f);
-    object = new WireframeObject(info, whiteColor);
+    Vector4 redColor = Vector4(1.0f, 0.0f, 0.0f);
+    Vector4 greenColor = Vector4(0.0f, 1.0f, 0.0f);
+
+    sphereObject = new WireframeObject(sphereInfo, redColor);
+    cubeObject = new WireframeObject(cubeInfo, greenColor);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
@@ -161,10 +168,6 @@ void RenderFunction(void)
     ++FrameCount;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    object->Render(mainProgram);
-    camera->SetRotation(rotX, rotY, 0.0f);
-    camera->SetPosition(xPos, yPos, zPos);
-    camera->UpdateView(mainProgram);
     if (Keyboard::KeyPressed(LKEY_W))
         zPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_S))
@@ -189,6 +192,22 @@ void RenderFunction(void)
         rotY -= 0.1;
     if (Keyboard::KeyPressed(KEY_6))
         rotY += 0.1;
+
+    camera->SetRotation(rotX, rotY, 0.0f);
+    camera->SetPosition(xPos, yPos, zPos);
+    camera->UpdateView(mainProgram);
+    
+    sphereObject->SetPosition(0.0f, sinf(t) * 5.0f, 0.0f);
+    sphereObject->SetScale(cosf(t), cosf(t), cosf(t));
+
+    cubeObject->SetPosition(0.0f, 0.0f, sinf(t) * 5.0f);
+    cubeObject->SetRotation(cosf(t) * 90.0f, 0.0f, 0.0f);
+
+    sphereObject->Render(mainProgram);
+    cubeObject->Render(mainProgram);
+
+    t += 0.001;
+
     glutSwapBuffers();
 }
 
@@ -213,7 +232,6 @@ void TimerFunction(int Value)
             CurrentHeight
         );
         
-        
         glutSetWindowTitle(TempString);
         free(TempString);
     }
@@ -224,5 +242,8 @@ void TimerFunction(int Value)
 
 void Cleanup(void)
 {
-    delete object;
+    delete sphereObject;
+    delete cubeObject;
+
+    delete objectLoader;
 }
