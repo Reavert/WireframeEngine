@@ -30,22 +30,10 @@ GLfloat rotZ = 0.0f;
 
 GLfloat t = 0.0f;
 
-vector<GLfloat> Vertices = {
-      -0.8f,  0.8f, 0.0f, 1.0f,
-       0.8f,  0.8f, 0.0f, 1.0f,
-      0.8f, -0.8f, 0.0f, 1.0f,
-       -0.8f, -0.8f, 0.0f, 1.0f
-};
-
-vector<GLfloat> Colors = {
-  1.0f, 0.0f, 0.0f, 1.0f,
-  0.0f, 1.0f, 0.0f, 1.0f,
-  0.0f, 0.0f, 1.0f, 1.0f,
-  1.0f, 1.0f, 1.0f, 1.0f
-};
-
 WireframeObject* sphereObject;
 WireframeObject* cubeObject;
+WireframeObject* monkeyObject;
+
 ObjectLoader* objectLoader;
 
 ShaderProgram* mainProgram;
@@ -104,15 +92,18 @@ void Initialize(int argc, char* argv[])
 
     ObjectInfo sphereInfo = objectLoader->Load("Objects/sphere.3d");
     ObjectInfo cubeInfo = objectLoader->Load("Objects/cube.3d");
+    ObjectInfo monkeyInfo = objectLoader->Load("Objects/monke.3d");
 
     vector<Vector4> vertices;
     vector<GLuint> indices;
 
     Vector4 redColor = Vector4(1.0f, 0.0f, 0.0f);
     Vector4 greenColor = Vector4(0.0f, 1.0f, 0.0f);
+    Vector4 blueColor = Vector4(0.0f, 0.0f, 1.0f);
 
     sphereObject = new WireframeObject(sphereInfo, redColor);
     cubeObject = new WireframeObject(cubeInfo, greenColor);
+    monkeyObject = new WireframeObject(monkeyInfo, blueColor);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
@@ -205,21 +196,29 @@ void RenderFunction(void)
     if (Keyboard::KeyPressed(KEY_9))
         rotZ -= 0.1;
 
-    Vector3 forward = camera->GetForward();
-    printf("Forward: %f, %f, %f\n", forward.x, forward.y, forward.z);
-
     camera->SetRotation(rotX, rotY, rotZ);
-    camera->SetPosition(xPos, yPos, zPos);
+    Vector3 forward = camera->GetForwardVector();
+    Vector3 up = camera->GetUpVector();
+    printf("Forward: %f, %f, %f\n", forward.x, forward.y, forward.z);
+    printf("Up: %f, %f, %f\n", up.x, up.y, up.z);
+
+    camera->SetRotation(0.0f, 0.0f, 0.0f);
+    camera->SetPosition(0.0f, 0.0f, -10.0f);
     camera->UpdateView(mainProgram);
 
-    sphereObject->SetScale(0.01f, 0.01f, 0.01f);
-    sphereObject->SetPosition(forward.x, forward.y, forward.z);
+    sphereObject->SetScale(1.0f, 1.0f, 1.0f);
+    sphereObject->SetPosition(forward.x * 5.0f, forward.y * 5.0f, forward.z * 5.0f);
     
-    cubeObject->SetPosition(0.0f, 0.0f, sinf(t) * 5.0f);
+    cubeObject->SetScale(1.0f, 1.0f, 1.0f);
+    cubeObject->SetPosition(up.x * 5.0f, up.y * 5.0f, up.z * 5.0f);
     
+    monkeyObject->SetPosition(0.0f, 0.0f, 0.0f);
+    monkeyObject->SetRotation(rotX, rotY, rotZ);
+
     sphereObject->Render(mainProgram);
     cubeObject->Render(mainProgram);
-    
+    monkeyObject->Render(mainProgram);
+
     t += 0.001;
 
     glutSwapBuffers();

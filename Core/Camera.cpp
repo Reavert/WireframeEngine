@@ -53,18 +53,37 @@ void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
 	m_viewRotation.y = rotY;
 	m_viewRotation.z = rotZ;
 
-	GLfloat _y = sinf(rotX * PI / 180.0f);
-	GLfloat _z = cosf(rotX * PI / 180.0f);
+	GLfloat _forwardX, _forwardY, _forwardZ;
+	GLfloat forwardX, forwardY, forwardZ;
 
-	GLfloat _x = _z * sinf(rotY * PI / 180.0f);
-	GLfloat z = _z * cosf(rotY * PI / 180.0f);
+	GLfloat _upX, _upY, _upZ;
+	GLfloat upX, upY, upZ;
 
-	GLfloat x = _x * cosf(rotZ * PI / 180.0f) + _y * sinf(rotZ * PI / 180.0f);
-	GLfloat y = _x * sinf(rotZ * PI / 180.0f) - _y * cosf(rotZ * PI / 180.0f);
+	_forwardY = sinf(rotX * PI / 180.0f);
+	_forwardZ = cosf(rotX * PI / 180.0f);
 
-	m_viewForward.x = x;
-	m_viewForward.y = y;
-	m_viewForward.z = z;
+	_forwardX = _forwardZ * sinf(rotY * PI / 180.0f);
+	forwardZ = _forwardZ * cosf(rotY * PI / 180.0f);
+
+	forwardX = _forwardX * cosf(rotZ * PI / 180.0f) + _forwardY * sinf(rotZ * PI / 180.0f);
+	forwardY = _forwardX * sinf(rotZ * PI / 180.0f) - _forwardY * cosf(rotZ * PI / 180.0f);
+
+	m_viewForward.x = forwardX;
+	m_viewForward.y = forwardY;
+	m_viewForward.z = forwardZ;
+
+	_upY = -cosf(rotX * PI / 180.0f);
+	_upZ = sinf(rotX * PI / 180.0f);
+
+	_upX = _upZ * sinf(rotY * PI / 180.0f);
+	upZ = _upZ * cosf(rotY * PI / 180.0f);
+
+	upX = _upX * cosf(rotZ * PI / 180.0f) + _upY * sinf(rotZ * PI / 180.0f);
+	upY = _upX * sinf(rotZ * PI / 180.0f) - _upY * cosf(rotZ * PI / 180.0f);
+
+	m_viewUp.x = upX;
+	m_viewUp.y = upY;
+	m_viewUp.z = upZ;
 }
 
 void Camera::SetRotation(Vector3 rotation)
@@ -72,9 +91,14 @@ void Camera::SetRotation(Vector3 rotation)
 	SetRotation(rotation.x, rotation.y, rotation.z);
 }
 
-Vector3 Camera::GetForward()
+Vector3 Camera::GetForwardVector()
 {
 	return m_viewForward;
+}
+
+Vector3 Camera::GetUpVector()
+{
+	return m_viewUp;
 }
 
 void Camera::UpdateProjection(ShaderProgram* program)

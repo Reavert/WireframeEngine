@@ -17,7 +17,8 @@ public:
 	void SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ);
 	void SetRotation(Vector3 rotation);
 
-	Vector3 GetForward();
+	Vector3 GetForwardVector();
+	Vector3 GetUpVector();
 
 	void UpdateProjection(ShaderProgram* program);
 	void UpdateView(ShaderProgram* program);
