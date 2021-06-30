@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <math.h>
 
 Camera::Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearZ, GLfloat farZ)
 {
@@ -45,7 +44,7 @@ void Camera::SetPosition(GLfloat posX, GLfloat posY, GLfloat posZ)
 
 void Camera::SetPosition(Vector3 position)
 {
-	m_viewPosition = position;
+	SetPosition(position.x, position.y, position.z);
 }
 
 void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
@@ -53,11 +52,29 @@ void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
 	m_viewRotation.x = rotX;
 	m_viewRotation.y = rotY;
 	m_viewRotation.z = rotZ;
+
+	GLfloat _y = sinf(rotX * PI / 180.0f);
+	GLfloat _z = cosf(rotX * PI / 180.0f);
+
+	GLfloat _x = _z * sinf(rotY * PI / 180.0f);
+	GLfloat z = _z * cosf(rotY * PI / 180.0f);
+
+	GLfloat x = _x * cosf(rotZ * PI / 180.0f) + _y * sinf(rotZ * PI / 180.0f);
+	GLfloat y = _x * sinf(rotZ * PI / 180.0f) - _y * cosf(rotZ * PI / 180.0f);
+
+	m_viewForward.x = x;
+	m_viewForward.y = y;
+	m_viewForward.z = z;
 }
 
 void Camera::SetRotation(Vector3 rotation)
 {
-	m_viewRotation = rotation;
+	SetRotation(rotation.x, rotation.y, rotation.z);
+}
+
+Vector3 Camera::GetForward()
+{
+	return m_viewForward;
 }
 
 void Camera::UpdateProjection(ShaderProgram* program)

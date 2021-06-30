@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 #include <glew.h>
 #include "ShaderProgram.h"
 #include "Vector3.h"
@@ -16,6 +17,8 @@ public:
 	void SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ);
 	void SetRotation(Vector3 rotation);
 
+	Vector3 GetForward();
+
 	void UpdateProjection(ShaderProgram* program);
 	void UpdateView(ShaderProgram* program);
 private:
@@ -29,4 +32,7 @@ private:
 
 	Vector3 m_viewPosition;
 	Vector3 m_viewRotation;
+
+	Vector3 m_viewForward;
+	Vector3 m_viewUp;
 };

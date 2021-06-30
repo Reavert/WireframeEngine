@@ -26,6 +26,7 @@ GLfloat scale = 1.0f;
 
 GLfloat rotX = 0.0f;
 GLfloat rotY = 0.0f;
+GLfloat rotZ = 0.0f;
 
 GLfloat t = 0.0f;
 
@@ -56,6 +57,7 @@ void ResizeFunction(int, int);
 void RenderFunction(void);
 void TimerFunction(int);
 void IdleFunction(void);
+void MouseMoveFunction(int, int);
 void Cleanup(void);
 
 int main(int argc, char* argv[])
@@ -146,12 +148,18 @@ void InitWindow(int argc, char* argv[])
 
     glutReshapeFunc(ResizeFunction);
     glutDisplayFunc(RenderFunction);
+    glutMotionFunc(MouseMoveFunction);
     glutKeyboardFunc(Keyboard::KeyboardDown);
     glutKeyboardUpFunc(Keyboard::KeyboardUp);
     glutIgnoreKeyRepeat(GL_TRUE);
     glutIdleFunc(IdleFunction);
     glutTimerFunc(0, TimerFunction, 0);
     glutCloseFunc(Cleanup);
+}
+
+void MouseMoveFunction(int x, int y)
+{
+
 }
 
 void ResizeFunction(int Width, int Height)
@@ -192,20 +200,26 @@ void RenderFunction(void)
         rotY -= 0.1;
     if (Keyboard::KeyPressed(KEY_6))
         rotY += 0.1;
+    if (Keyboard::KeyPressed(KEY_7))
+        rotZ += 0.1;
+    if (Keyboard::KeyPressed(KEY_9))
+        rotZ -= 0.1;
 
-    camera->SetRotation(rotX, rotY, 0.0f);
+    Vector3 forward = camera->GetForward();
+    printf("Forward: %f, %f, %f\n", forward.x, forward.y, forward.z);
+
+    camera->SetRotation(rotX, rotY, rotZ);
     camera->SetPosition(xPos, yPos, zPos);
     camera->UpdateView(mainProgram);
+
+    sphereObject->SetScale(0.01f, 0.01f, 0.01f);
+    sphereObject->SetPosition(forward.x, forward.y, forward.z);
     
-    sphereObject->SetPosition(0.0f, sinf(t) * 5.0f, 0.0f);
-    sphereObject->SetScale(cosf(t), cosf(t), cosf(t));
-
     cubeObject->SetPosition(0.0f, 0.0f, sinf(t) * 5.0f);
-    cubeObject->SetRotation(cosf(t) * 90.0f, 0.0f, 0.0f);
-
+    
     sphereObject->Render(mainProgram);
     cubeObject->Render(mainProgram);
-
+    
     t += 0.001;
 
     glutSwapBuffers();
