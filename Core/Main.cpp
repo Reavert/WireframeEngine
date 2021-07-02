@@ -7,7 +7,10 @@
 #include "ObjectLoader.h"
 #include "Keyboard.h"
 #include "Camera.h"
+#include "fmod.hpp"
 #define WINDOW_TITLE_PREFIX "Application"
+
+FMOD::System* audioSystem;
 
 int
 CurrentWidth = 800,
@@ -60,7 +63,12 @@ int main(int argc, char* argv[])
 void Initialize(int argc, char* argv[])
 {
     GLenum GlewInitResult;
-    
+    FMOD::System_Create(&audioSystem);
+    audioSystem->init(512, FMOD_INIT_NORMAL, 0);
+
+    FMOD::Sound* sound;
+    audioSystem->createSound("Sounds/music.mp3", FMOD_3D, NULL, &sound);
+    audioSystem->playSound(sound, 0, false, NULL);
     glewExperimental = GL_TRUE;
     InitWindow(argc, argv);
     
