@@ -59,27 +59,41 @@ void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
 	GLfloat _upX, _upY, _upZ;
 	GLfloat upX, upY, upZ;
 
-	_forwardY = sinf(rotX * PI / 180.0f);
-	_forwardZ = cosf(rotX * PI / 180.0f);
+	const GLfloat toRadian = PI / 180.0f;
+	const GLfloat radRotX = rotX * toRadian;
+	const GLfloat radRotY = rotY * toRadian;
+	const GLfloat radRotZ = rotZ * toRadian;
 
-	_forwardX = _forwardZ * sinf(rotY * PI / 180.0f);
-	forwardZ = _forwardZ * cosf(rotY * PI / 180.0f);
+	const GLfloat sinX = sinf(radRotX);
+	const GLfloat cosX = cosf(radRotX);
 
-	forwardX = _forwardX * cosf(rotZ * PI / 180.0f) + _forwardY * sinf(rotZ * PI / 180.0f);
-	forwardY = _forwardX * sinf(rotZ * PI / 180.0f) - _forwardY * cosf(rotZ * PI / 180.0f);
+	const GLfloat sinY = sinf(radRotY);
+	const GLfloat cosY = cosf(radRotY);
+
+	const GLfloat sinZ = sinf(radRotZ);
+	const GLfloat cosZ = cosf(radRotZ);
+
+	_forwardY = sinX;
+	_forwardZ = cosX;
+
+	_forwardX = _forwardZ * sinY;
+	forwardZ = _forwardZ * cosY;
+
+	forwardX = _forwardX * cosZ + _forwardY * sinZ;
+	forwardY = _forwardX * sinZ - _forwardY * cosZ;
 
 	m_viewForward.x = forwardX;
 	m_viewForward.y = forwardY;
 	m_viewForward.z = forwardZ;
 
-	_upY = -cosf(rotX * PI / 180.0f);
-	_upZ = sinf(rotX * PI / 180.0f);
+	_upY = -cosX;
+	_upZ = sinX;
 
-	_upX = _upZ * sinf(rotY * PI / 180.0f);
-	upZ = _upZ * cosf(rotY * PI / 180.0f);
+	_upX = _upZ * sinY;
+	upZ = _upZ * cosY;
 
-	upX = _upX * cosf(rotZ * PI / 180.0f) + _upY * sinf(rotZ * PI / 180.0f);
-	upY = _upX * sinf(rotZ * PI / 180.0f) - _upY * cosf(rotZ * PI / 180.0f);
+	upX = _upX * cosZ + _upY * sinZ;
+	upY = _upX * sinZ - _upY * cosZ;
 
 	m_viewUp.x = upX;
 	m_viewUp.y = upY;
