@@ -10,8 +10,6 @@
 #include "fmod.hpp"
 #define WINDOW_TITLE_PREFIX "Application"
 
-FMOD::System* audioSystem;
-
 int
 CurrentWidth = 800,
 CurrentHeight = 600,
@@ -27,9 +25,9 @@ GLfloat zPos = 0.0f;
 
 GLfloat scale = 1.0f;
 
-GLfloat rotX = 0.0f;
-GLfloat rotY = 0.0f;
-GLfloat rotZ = 0.0f;
+GLfloat xRot = 0.0f;
+GLfloat yRot = 0.0f;
+GLfloat zRot = 0.0f;
 
 GLfloat t = 0.0f;
 
@@ -41,6 +39,18 @@ ObjectLoader* objectLoader;
 
 ShaderProgram* mainProgram;
 Camera* camera;
+
+FMOD::System* audioSystem;
+FMOD::Sound* sound;
+FMOD::Channel* channel;
+
+FMOD_VECTOR soundPosition = { 0.0f, 0.0f, 0.0f };
+FMOD_VECTOR soundVelocity = { 0.0f, 0.0f, 0.0f };
+
+FMOD_VECTOR listenerPosition;
+FMOD_VECTOR listenerForward;
+FMOD_VECTOR listenerUp;
+FMOD_VECTOR listenerVelocity;
 
 void Initialize(int, char* []);
 void InitWindow(int, char* []);
@@ -63,12 +73,6 @@ int main(int argc, char* argv[])
 void Initialize(int argc, char* argv[])
 {
     GLenum GlewInitResult;
-    FMOD::System_Create(&audioSystem);
-    audioSystem->init(512, FMOD_INIT_NORMAL, 0);
-
-    FMOD::Sound* sound;
-    audioSystem->createSound("Sounds/music.mp3", FMOD_3D, NULL, &sound);
-    audioSystem->playSound(sound, 0, false, NULL);
     glewExperimental = GL_TRUE;
     InitWindow(argc, argv);
     
@@ -88,6 +92,15 @@ void Initialize(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
+
+    FMOD::System_Create(&audioSystem);
+    audioSystem->init(512, FMOD_INIT_NORMAL, 0);
+ 
+    audioSystem->createSound("Sounds/music.mp3", FMOD_3D, NULL, &sound);
+    sound->set3DMinMaxDistance(0.5f, 5000.0f);
+    sound->setMode(FMOD_LOOP_NORMAL);
+    audioSystem->playSound(sound, 0, false, &channel);
+    channel->set3DAttributes(&soundPosition, &soundVelocity);
 
     mainProgram = new ShaderProgram("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     mainProgram->Use();
@@ -192,40 +205,47 @@ void RenderFunction(void)
     if (Keyboard::KeyPressed(KEY_MINUS))
         scale -= 0.001;
     if (Keyboard::KeyPressed(KEY_2))
-        rotX += 0.1;
+        xRot += 0.1;
     if (Keyboard::KeyPressed(KEY_8))
-        rotX -= 0.1;
+        xRot -= 0.1;
     if (Keyboard::KeyPressed(KEY_4))
-        rotY -= 0.1;
+        yRot -= 0.1;
     if (Keyboard::KeyPressed(KEY_6))
-        rotY += 0.1;
+        yRot += 0.1;
     if (Keyboard::KeyPressed(KEY_7))
-        rotZ += 0.1;
+        zRot += 0.1;
     if (Keyboard::KeyPressed(KEY_9))
-        rotZ -= 0.1;
+        zRot -= 0.1;
 
-    camera->SetRotation(rotX, rotY, rotZ);
-    Vector3 forward = camera->GetForwardVector();
-    Vector3 up = camera->GetUpVector();
-    printf("Forward: %f, %f, %f\n", forward.x, forward.y, forward.z);
-    printf("Up: %f, %f, %f\n", up.x, up.y, up.z);
-
-    camera->SetRotation(0.0f, 0.0f, 0.0f);
-    camera->SetPosition(0.0f, 0.0f, -10.0f);
+    camera->SetRotation(xRot, yRot, zRot);
+    camera->SetPosition(xPos, yPos, zPos);
     camera->UpdateView(mainProgram);
 
-    sphereObject->SetScale(1.0f, 1.0f, 1.0f);
-    sphereObject->SetPosition(forward.x * 5.0f, forward.y * 5.0f, forward.z * 5.0f);
-    
-    cubeObject->SetScale(1.0f, 1.0f, 1.0f);
-    cubeObject->SetPosition(up.x * 5.0f, up.y * 5.0f, up.z * 5.0f);
-    
-    monkeyObject->SetPosition(0.0f, 0.0f, 0.0f);
-    monkeyObject->SetRotation(rotX, rotY, rotZ);
+    sphereObject->SetPosition(cos(t) * 10.0f, 0.0f, sin(t) * 10.0f);
+    cubeObject->SetPosition(0.0f, sin(t), 1.0f);
 
     sphereObject->Render(mainProgram);
     cubeObject->Render(mainProgram);
     monkeyObject->Render(mainProgram);
+
+    Vector3 forward = camera->GetForwardVector();
+    Vector3 up = camera->GetUpVector();
+    Vector3 position = camera->GetPosition();
+
+    listenerForward.x = forward.x;
+    listenerForward.y = forward.y;
+    listenerForward.z = forward.z;
+
+    listenerUp.x = up.x;
+    listenerUp.y = up.y;
+    listenerUp.z = up.z;
+
+    listenerPosition.x = position.x;
+    listenerPosition.y = position.y;
+    listenerPosition.z = position.z;
+
+    audioSystem->set3DListenerAttributes(0, &listenerPosition, &listenerVelocity, &listenerForward, &listenerUp);
+    audioSystem->update();
 
     t += 0.001;
 
@@ -263,6 +283,11 @@ void TimerFunction(int Value)
 
 void Cleanup(void)
 {
+    sound->release();
+    
+    audioSystem->close();
+    audioSystem->release();
+
     delete sphereObject;
     delete cubeObject;
 

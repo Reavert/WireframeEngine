@@ -47,6 +47,11 @@ void Camera::SetPosition(Vector3 position)
 	SetPosition(position.x, position.y, position.z);
 }
 
+Vector3 Camera::GetPosition()
+{
+	return m_viewPosition;
+}
+
 void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
 {
 	m_viewRotation.x = rotX;
@@ -103,6 +108,11 @@ void Camera::SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ)
 void Camera::SetRotation(Vector3 rotation)
 {
 	SetRotation(rotation.x, rotation.y, rotation.z);
+}
+
+Vector3 Camera::GetRotation()
+{
+	return m_viewRotation;
 }
 
 Vector3 Camera::GetForwardVector()

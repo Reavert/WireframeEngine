@@ -13,9 +13,11 @@ public:
 
 	void SetPosition(GLfloat posX, GLfloat posY, GLfloat posZ);
 	void SetPosition(Vector3 position);
+	Vector3 GetPosition();
 
 	void SetRotation(GLfloat rotX, GLfloat rotY, GLfloat rotZ);
 	void SetRotation(Vector3 rotation);
+	Vector3 GetRotation();
 
 	Vector3 GetForwardVector();
 	Vector3 GetUpVector();
