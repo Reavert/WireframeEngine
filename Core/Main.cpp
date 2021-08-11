@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "WireframeObject.h"
 #include "ObjectLoader.h"
@@ -51,6 +50,8 @@ void InitCamera();
 int main(int argc, char* argv[])
 {
     Window window = Window(argc, argv);
+    window.SetSize(1920, 1080);
+    window.SetTitle("test");
     Initialize();
 }
 

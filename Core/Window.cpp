@@ -68,11 +68,32 @@ void Window::InitWindow(int argc, char* argv[])
     );
 }
 
+void Window::SetTitle(std::string title)
+{
+    m_title = title;
+    glutSetWindowTitle(m_title.c_str());
+}
+
+std::string Window::GetTitle()
+{
+    return m_title;
+}
+
 void Window::SetSize(uint32_t width, uint32_t height)
 {
     m_width = width;
     m_height = height;
     glViewport(0, 0, m_width, m_height);
+}
+
+uint32_t Window::GetWidth()
+{
+    return m_height;
+}
+
+uint32_t Window::GetHeight()
+{
+    return m_height;
 }
 
 void Window::ResizeFunction(int width, int height, void* data)
