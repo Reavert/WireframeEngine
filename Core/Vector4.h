@@ -1,8 +1,9 @@
 #pragma once
 #include <glew.h>
-#include <vector>
+#include "IArray.h"
+
 using namespace std;
-class Vector4
+class Vector4 : public IArray<GLfloat>
 {
 public:
 	Vector4(void);
@@ -14,6 +15,6 @@ public:
 	GLfloat z;
 	GLfloat w;
 
-	vector<GLfloat> ToArray(void);
+	virtual vector<GLfloat> ToArray(void);
 };
 
