@@ -46,13 +46,19 @@ void InitAudioSystem();
 void LoadShaders();
 void LoadObjects();
 void InitCamera();
+void Cleanup();
+void RenderFunction();
 
 int main(int argc, char* argv[])
 {
-    Window window = Window(argc, argv);
-    window.SetSize(1920, 1080);
-    window.SetTitle("test");
-    Initialize();
+    Window window = Window();
+    window.OnInitialize = Initialize;
+    window.OnRelease = Cleanup;
+    window.OnUpdate = RenderFunction;
+
+    window.Create(argc, argv);
+
+    window.StartLoop();
 }
 
 void InitAudioSystem()

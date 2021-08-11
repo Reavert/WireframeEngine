@@ -11,8 +11,10 @@
 class Window
 {
 public:
-	Window(int argc, char* argv[]);
+	Window();
 	~Window();
+
+	void Create(int argc, char* argv[]);
 
 	void SetTitle(std::string title);
 	std::string GetTitle();
@@ -20,6 +22,11 @@ public:
 	void SetSize(uint32_t width, uint32_t height);
 	uint32_t GetWidth();
 	uint32_t GetHeight();
+
+	void (*OnInitialize)();
+	void (*OnUpdate)();
+	void (*OnRelease)();
+	void StartLoop();
 private:
 	std::string m_title;
 	int m_handle;
@@ -27,7 +34,7 @@ private:
 	uint32_t m_width;
 	uint32_t m_height;
 
-	void InitWindow(int argc, char* argv[]);
+
 	static void ResizeFunction(int width, int height, void* data);
 	static void RenderFunction(void* data);
 };

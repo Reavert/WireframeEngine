@@ -1,21 +1,19 @@
 #include "Window.h"
 
-Window::Window(int argc, char* argv[])
+Window::Window()
 {
     m_title = DEFAULT_TITLE;
     m_width = DEFAULT_WIDTH;
     m_height = DEFAULT_HEIGHT;
-
-    InitWindow(argc, argv);
-    glutMainLoop();
 }
 
 Window::~Window()
 {
+    OnRelease();
     exit(EXIT_SUCCESS);
 }
 
-void Window::InitWindow(int argc, char* argv[])
+void Window::Create(int argc, char* argv[])
 {
     GLenum glewInitResult;
     glewExperimental = GL_TRUE;
@@ -66,6 +64,13 @@ void Window::InitWindow(int argc, char* argv[])
         "INFO: OpenGL Version: %s\n",
         glGetString(GL_VERSION)
     );
+
+    OnInitialize();
+}
+
+void Window::StartLoop()
+{
+    glutMainLoop();
 }
 
 void Window::SetTitle(std::string title)
@@ -109,7 +114,7 @@ void Window::RenderFunction(void* data)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Rendering object here
+    sender->OnUpdate();
 
     glutSwapBuffers();
 }
