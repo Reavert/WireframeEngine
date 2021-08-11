@@ -19,6 +19,8 @@ unsigned FrameCount = 0;
 
 unsigned char keys[256];
 
+GLfloat delta = 0.0f;
+
 GLfloat xPos = 0.0f;
 GLfloat yPos = 0.0f;
 GLfloat zPos = 0.0f;
@@ -183,8 +185,6 @@ void ResizeFunction(int Width, int Height)
 
 void RenderFunction(void)
 {
-    GLenum ErrorCheckValue = glGetError();
-
     ++FrameCount;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -240,6 +240,10 @@ void RenderFunction(void)
     listenerUp.y = up.y;
     listenerUp.z = up.z;
 
+    listenerVelocity.x = listenerPosition.x - position.x;
+    listenerVelocity.y = listenerPosition.y - position.y;
+    listenerVelocity.z = listenerPosition.z - position.z;
+
     listenerPosition.x = position.x;
     listenerPosition.y = position.y;
     listenerPosition.z = position.z;
@@ -247,7 +251,7 @@ void RenderFunction(void)
     audioSystem->set3DListenerAttributes(0, &listenerPosition, &listenerVelocity, &listenerForward, &listenerUp);
     audioSystem->update();
 
-    t += 0.001;
+    t += delta;
 
     glutSwapBuffers();
 }
@@ -257,9 +261,9 @@ void IdleFunction(void)
     glutPostRedisplay();
 }
 
-void TimerFunction(int Value)
+void TimerFunction(int value)
 {
-    if (0 != Value) {
+    if (0 != value) {
         int size = 512 + strlen(WINDOW_TITLE_PREFIX);
         char* TempString = (char*)
             malloc(size);
