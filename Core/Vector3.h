@@ -9,6 +9,7 @@ public:
 	Vector3(void);
 	Vector3(GLfloat x, GLfloat y, GLfloat z);
 	virtual vector<GLfloat> ToArray();
+
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
