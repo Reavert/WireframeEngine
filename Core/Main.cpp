@@ -115,8 +115,6 @@ void Initialize()
 
 void RenderFunction(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
     if (Keyboard::KeyPressed(LKEY_W))
         zPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_S))
