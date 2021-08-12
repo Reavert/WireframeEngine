@@ -10,7 +10,6 @@ Window::Window()
 Window::~Window()
 {
     OnRelease();
-    exit(EXIT_SUCCESS);
 }
 
 void Window::Create(int argc, char* argv[])

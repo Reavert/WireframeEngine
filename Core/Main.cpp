@@ -59,6 +59,7 @@ int main(int argc, char* argv[])
     window.Create(argc, argv);
 
     window.StartLoop();
+    Cleanup();
 }
 
 void InitAudioSystem()
@@ -191,4 +192,6 @@ void Cleanup(void)
     delete monkeyObject;
 
     delete objectLoader;
+
+    exit(EXIT_SUCCESS);
 }
