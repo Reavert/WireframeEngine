@@ -114,7 +114,7 @@ void Initialize()
     InitCamera();
 }
 
-void RenderFunction(void)
+void RenderFunction()
 {
     if (Keyboard::KeyPressed(LKEY_W))
         zPos += 0.001;
@@ -178,6 +178,8 @@ void RenderFunction(void)
 
     audioSystem->set3DListenerAttributes(0, &listenerPosition, &listenerVelocity, &listenerForward, &listenerUp);
     audioSystem->update();
+
+    t += 0.001f;
 }
 
 void Cleanup(void)

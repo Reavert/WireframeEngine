@@ -42,6 +42,7 @@ void Window::Create(int argc, char* argv[])
 
     glutReshapeFuncUcall(ResizeFunction, this);
     glutDisplayFuncUcall(RenderFunction, this);
+    glutIdleFuncUcall(IdleFunction, this);
 
     glutKeyboardFunc(Keyboard::KeyboardDown);
     glutKeyboardUpFunc(Keyboard::KeyboardUp);
@@ -102,18 +103,25 @@ uint32_t Window::GetHeight()
 
 void Window::ResizeFunction(int width, int height, void* data)
 {
-    Window* sender = (Window*)data;
+    Window* sender = static_cast<Window*>(data);
 
     sender->SetSize(width, height);
 }
 
 void Window::RenderFunction(void* data)
 {
-    Window* sender = (Window*)data;
+    Window* sender = static_cast<Window*>(data);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     sender->OnUpdate();
 
     glutSwapBuffers();
+}
+
+void Window::IdleFunction(void* data)
+{
+    Window* sender = static_cast<Window*>(data);
+
+    glutPostWindowRedisplay(sender->m_handle);
 }

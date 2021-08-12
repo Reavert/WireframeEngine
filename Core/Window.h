@@ -37,4 +37,5 @@ private:
 
 	static void ResizeFunction(int width, int height, void* data);
 	static void RenderFunction(void* data);
+	static void IdleFunction(void* data);
 };
