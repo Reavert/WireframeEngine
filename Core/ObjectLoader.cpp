@@ -1,6 +1,5 @@
 #include "ObjectLoader.h"
 
-
 ObjectInfo ObjectLoader::Load(const char* filename)
 {
 	FILE* objectFile;
@@ -13,7 +12,7 @@ ObjectInfo ObjectLoader::Load(const char* filename)
 		while (!feof(objectFile))
 		{
 			strcpy_s(elementType, 32, "\0");
-			fscanf_s(objectFile, "%s", elementType, _countof(elementType));
+			fscanf_s(objectFile, "%s", elementType, (unsigned int)_countof(elementType));
 			if (!strcmp(elementType, "v"))
 			{
 				Vector4 v;
