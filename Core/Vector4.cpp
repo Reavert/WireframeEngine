@@ -17,3 +17,43 @@ vector<GLfloat> Vector4::ToArray()
 	vector<GLfloat> v = { x, y, z, w };
 	return v;
 }
+
+Vector4 Vector4::operator+(Vector4 rhs)
+{
+	return Vector4(
+		this->x + rhs.x,
+		this->y + rhs.y,
+		this->z + rhs.z,
+		this->w + rhs.w
+	);
+}
+
+Vector4 Vector4::operator-(Vector4 rhs)
+{
+	return Vector4(
+		this->x - rhs.x,
+		this->y - rhs.y,
+		this->z - rhs.z,
+		this->w - rhs.w
+	);
+}
+
+Vector4 Vector4::operator*(Vector4 rhs)
+{
+	return Vector4(
+		this->x * rhs.x,
+		this->y * rhs.y,
+		this->z * rhs.z,
+		this->w * rhs.w
+	);
+}
+
+Vector4 Vector4::operator*(GLfloat rhs)
+{
+	return Vector4(
+		this->x * rhs,
+		this->y * rhs,
+		this->z * rhs,
+		this->w * rhs
+	);
+}

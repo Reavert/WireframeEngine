@@ -10,6 +10,11 @@ public:
 	Vector4(GLfloat x, GLfloat y, GLfloat z);
 	Vector4(GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
+	Vector4 operator+(Vector4);
+	Vector4 operator-(Vector4);
+	Vector4 operator*(Vector4);
+	Vector4 operator*(GLfloat);
+
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
