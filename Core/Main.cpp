@@ -94,9 +94,6 @@ void LoadObjects()
     ObjectInfo cubeInfo = objectLoader->Load("Objects/cube.3d");
     ObjectInfo monkeyInfo = objectLoader->Load("Objects/monke.3d");
 
-    vector<Vector4> vertices;
-    vector<GLuint> indices;
-
     Vector4 redColor = Vector4(1.0f, 0.0f, 0.0f);
     Vector4 greenColor = Vector4(0.0f, 1.0f, 0.0f);
     Vector4 blueColor = Vector4(0.0f, 0.0f, 1.0f);
