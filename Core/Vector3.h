@@ -10,10 +10,10 @@ public:
 	Vector3(GLfloat x, GLfloat y, GLfloat z);
 	vector<GLfloat> ToArray() override;
 
-	Vector3 operator+(Vector3);
-	Vector3 operator-(Vector3);
-	Vector3 operator*(Vector3);
-	Vector3 operator*(GLfloat);
+	Vector3 operator+(Vector3) const;
+	Vector3 operator-(Vector3) const;
+	Vector3 operator*(Vector3) const;
+	Vector3 operator*(GLfloat) const;
 
 	GLfloat x;
 	GLfloat y;

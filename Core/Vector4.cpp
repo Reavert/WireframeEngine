@@ -18,7 +18,7 @@ vector<GLfloat> Vector4::ToArray()
 	return v;
 }
 
-Vector4 Vector4::operator+(Vector4 rhs)
+Vector4 Vector4::operator+(Vector4 rhs) const
 {
 	return Vector4(
 		this->x + rhs.x,
@@ -28,7 +28,7 @@ Vector4 Vector4::operator+(Vector4 rhs)
 	);
 }
 
-Vector4 Vector4::operator-(Vector4 rhs)
+Vector4 Vector4::operator-(Vector4 rhs) const
 {
 	return Vector4(
 		this->x - rhs.x,
@@ -38,7 +38,7 @@ Vector4 Vector4::operator-(Vector4 rhs)
 	);
 }
 
-Vector4 Vector4::operator*(Vector4 rhs)
+Vector4 Vector4::operator*(Vector4 rhs) const
 {
 	return Vector4(
 		this->x * rhs.x,
@@ -48,7 +48,7 @@ Vector4 Vector4::operator*(Vector4 rhs)
 	);
 }
 
-Vector4 Vector4::operator*(GLfloat rhs)
+Vector4 Vector4::operator*(GLfloat rhs) const
 {
 	return Vector4(
 		this->x * rhs,
