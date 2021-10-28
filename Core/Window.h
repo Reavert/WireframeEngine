@@ -27,6 +27,7 @@ public:
 	void (*OnUpdate)();
 	void (*OnRelease)();
 	void StartLoop();
+
 private:
 	std::string m_title;
 	int m_handle;

@@ -19,6 +19,7 @@ GLfloat yRot = 0.0f;
 GLfloat zRot = 0.0f;
 
 GLfloat t = 0.0f;
+GLfloat fps = 0.0f;
 
 WireframeObject* sphereObject;
 WireframeObject* cubeObject;
@@ -111,8 +112,16 @@ void Initialize()
     InitCamera();
 }
 
+ULONGLONG ticks = GetTickCount64();
 void RenderFunction()
 {
+    const ULONGLONG currentTicks = GetTickCount64();
+	const ULONGLONG deltaTicks = currentTicks - ticks + 1;
+    ticks = currentTicks;
+
+    fps = 1000.0f / static_cast<GLfloat>(deltaTicks);
+    t += 1.0f / fps;
+
     if (Keyboard::KeyPressed(LKEY_W))
         zPos += 0.001;
     if (Keyboard::KeyPressed(LKEY_S))
@@ -175,8 +184,6 @@ void RenderFunction()
 
     audioSystem->set3DListenerAttributes(0, &listenerPosition, &listenerVelocity, &listenerForward, &listenerUp);
     audioSystem->update();
-
-    t += 0.001f;
 }
 
 void Cleanup(void)
